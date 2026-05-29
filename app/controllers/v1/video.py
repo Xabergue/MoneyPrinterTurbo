@@ -37,13 +37,13 @@ from app.utils import file_security, utils
 # router = new_router(dependencies=[Depends(base.verify_token)])
 router = new_router()
 
-_enable_redis = config.app.get("enable_redis", False)
-_redis_host = config.app.get("redis_host", "localhost")
-_redis_port = config.app.get("redis_port", 6379)
-_redis_db = config.app.get("redis_db", 0)
-_redis_password = config.app.get("redis_password", None)
-_max_concurrent_tasks = config.app.get("max_concurrent_tasks", 5)
-_max_queued_tasks = config.app.get("max_queued_tasks", 100)
+_enable_redis = getattr(config, 'enable_redis', False) or config.app.get("enable_redis", False)
+_redis_host = getattr(config, 'redis_host', 'localhost') or config.app.get("redis_host", "localhost")
+_redis_port = getattr(config, 'redis_port', 6379) or config.app.get("redis_port", 6379)
+_redis_db = getattr(config, 'redis_db', 0) or config.app.get("redis_db", 0)
+_redis_password = getattr(config, 'redis_password', None) or config.app.get("redis_password", None)
+_max_concurrent_tasks = getattr(config, 'max_concurrent_tasks', 5) or config.app.get("max_concurrent_tasks", 5)
+_max_queued_tasks = getattr(config, 'max_queued_tasks', 100) or config.app.get("max_queued_tasks", 100)
 
 redis_url = f"redis://:{_redis_password}@{_redis_host}:{_redis_port}/{_redis_db}"
 # 根据配置选择合适的任务管理器
@@ -189,7 +189,8 @@ def get_task(
     query: TaskQueryRequest = Depends(),
 ):
     request_id = base.get_task_id(request)
-    endpoint = config.app.get("endpoint", "").rstrip("/")
+    endpoint = getattr(config, 'endpoint', '') or config.app.get("endpoint", "")
+    endpoint = endpoint.rstrip("/")
     task = sm.state.get_task(task_id)
     if task:
         task_dir = utils.task_dir()

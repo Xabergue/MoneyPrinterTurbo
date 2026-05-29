@@ -1,38 +1,40 @@
-.DS_Store
-/config.toml
-/storage/
-/.idea/
-/app/services/__pycache__
-/app/__pycache__/
-/app/config/__pycache__/
-/app/models/__pycache__/
-/app/utils/__pycache__/
-/*/__pycache__/*
-.vscode
-/**/.streamlit
-__pycache__
-logs/
+# ── Arquivos de configuração local ────────────────────────
+.env
+config.toml
 
-node_modules
-frontend/.next
-frontend/node_modules
-# VuePress 默认临时文件目录
-/sites/docs/.vuepress/.temp
-# VuePress 默认缓存目录
-/sites/docs/.vuepress/.cache
-# VuePress 默认构建生成的静态文件目录
-/sites/docs/.vuepress/dist
-# 模型目录
-/models/
-./models/*
-
+# ── Python ────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+.venv/
 venv/
-.venv
 
-# Debug and test files
-CLAUDE.md
+# ── Frontend ──────────────────────────────────────────────
+frontend/.next/
+frontend/node_modules/
+
+# ── Armazenamento e tarefas ───────────────────────────────
+storage/tasks/
+
+# ── IDE / OS ──────────────────────────────────────────────
+.DS_Store
+.idea/
+.vscode
+
+# ── Modelos baixados ─────────────────────────────────────
+/models/
+
+# ── Logs ──────────────────────────────────────────────────
+logs/
+streamlit.log
+
+# ── Debug e testes ────────────────────────────────────────
 debug/
 debug_*.py
 test_*.py
 !test/services/test_*.py
-streamlit.log
+
+# ── VuePress (legado) ────────────────────────────────────
+/sites/docs/.vuepress/.temp
+/sites/docs/.vuepress/.cache
+/sites/docs/.vuepress/dist

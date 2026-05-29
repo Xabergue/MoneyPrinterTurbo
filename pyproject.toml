@@ -24,9 +24,11 @@ dependencies = [
     "requests==2.33.1",
     "socksio==1.0.0",
     "pydub==0.25.1",
-    "kokoro>=0.9.4,<1.0; python_version<'3.13'",
+    "python-dotenv>=1.0.0",
+    "kokoro>=0.9.4; python_version>='3.10' and python_version<'3.13'",
     "kokoro==0.7.16; python_version>='3.13'",
     "soundfile>=0.12.1",
+    "toml>=0.10.2",
 ]
 
 [tool.hatch.build.targets.wheel]

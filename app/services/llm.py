@@ -53,9 +53,9 @@ def _generate_response(prompt: str) -> str:
 
         # Usa o cliente OpenAI com base_url configurável para compatibilidade
         # com qualquer endpoint que siga a API OpenAI (DeepSProxy, Ollama, etc.)
-        api_key = config.app.get("openai_api_key", "local")
-        model_name = config.app.get("openai_model_name", "deepseek-chat")
-        base_url = config.app.get("openai_base_url", "http://localhost:3000/v1")
+        api_key = config.openai_api_key
+        model_name = config.openai_model_name
+        base_url = config.openai_base_url
 
         if not api_key:
             api_key = "local"

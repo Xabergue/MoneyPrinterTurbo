@@ -23,7 +23,7 @@ _LOCAL_VIDEO_EXTENSIONS = (".mp4", ".mov", ".avi", ".mkv")
 def _get_tls_verify() -> bool:
     # Verificação de certificado TLS habilitada por padrão para evitar
     # ataques man-in-the-middle na busca e download de materiais.
-    tls_verify = config.app.get("tls_verify", True)
+    tls_verify = getattr(config, 'tls_verify', True)
     if isinstance(tls_verify, str):
         tls_verify = tls_verify.strip().lower() not in ("0", "false", "no", "off")
 
@@ -37,11 +37,11 @@ def _get_tls_verify() -> bool:
 
 
 def get_api_key(cfg_key: str):
-    api_keys = config.app.get(cfg_key)
+    api_keys = getattr(config, cfg_key, None) or config.app.get(cfg_key)
     if not api_keys:
         raise ValueError(
             f"\n\n##### {cfg_key} não está configurado #####\n\n"
-            f"Configure no arquivo config.toml: {config.config_file}\n\n"
+            f"Configure no arquivo .env as variáveis PEXELS_API_KEY ou PIXABAY_API_KEY\n\n"
             f"{utils.to_json(config.app)}"
         )
 
@@ -347,7 +347,7 @@ def download_videos(
 
     video_paths = []
 
-    material_directory = config.app.get("material_directory", "").strip()
+    material_directory = getattr(config, 'material_directory', '') or config.app.get("material_directory", "").strip()
     if material_directory == "task":
         material_directory = utils.task_dir(task_id)
     elif material_directory and not os.path.isdir(material_directory):

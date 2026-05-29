@@ -1,79 +1,75 @@
 import os
-import shutil
 import socket
-
-import toml
 from loguru import logger
+from dotenv import load_dotenv
 
+# Carrega o .env da raiz do projeto
 root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-config_file = f"{root_dir}/config.toml"
+load_dotenv(os.path.join(root_dir, ".env"))
 
+def _get(key, default=""):
+    return os.getenv(key, default)
 
-def load_config():
-    # Corrige: IsADirectoryError se config.toml for um diretório
-    if os.path.isdir(config_file):
-        shutil.rmtree(config_file)
+# ── LLM ──────────────────────────────────────────────────────
+openai_base_url = _get("LLM_BASE_URL", "http://localhost:3000/v1")
+openai_model_name = _get("LLM_MODEL", "deepseek-chat")
+openai_api_key = _get("LLM_API_KEY", "local")
 
-    if not os.path.isfile(config_file):
-        example_file = f"{root_dir}/config.example.toml"
-        if os.path.isfile(example_file):
-            shutil.copyfile(example_file, config_file)
-            logger.info("copiou config.example.toml para config.toml")
+# ── Vídeo ─────────────────────────────────────────────────────
+video_source = _get("VIDEO_SOURCE", "pexels")
+pexels_api_keys = [k.strip() for k in _get("PEXELS_API_KEY").split(",") if k.strip()]
+pixabay_api_keys = [k.strip() for k in _get("PIXABAY_API_KEY").split(",") if k.strip()]
 
-    logger.info(f"carregando configuração do arquivo: {config_file}")
+# ── TTS ───────────────────────────────────────────────────────
+tts_voice = _get("TTS_VOICE", "af_heart")
+tts_speed = float(_get("TTS_SPEED", "1.0"))
 
-    try:
-        _config_ = toml.load(config_file)
-    except Exception as e:
-        logger.warning(f"falha ao carregar config: {str(e)}, tentando como utf-8-sig")
-        with open(config_file, mode="r", encoding="utf-8-sig") as fp:
-            _cfg_content = fp.read()
-            _config_ = toml.loads(_cfg_content)
-    return _config_
+# ── Whisper ───────────────────────────────────────────────────
+whisper = {
+    "model_size": _get("WHISPER_MODEL", "medium"),
+    "device": _get("WHISPER_DEVICE", "cpu"),
+    "compute_type": _get("WHISPER_COMPUTE_TYPE", "int8"),
+}
 
-
-def save_config():
-    with open(config_file, "w", encoding="utf-8") as f:
-        _cfg["app"] = app
-        _cfg["ui"] = ui
-        f.write(toml.dumps(_cfg))
-
-
-_cfg = load_config()
-app = _cfg.get("app", {})
-whisper = _cfg.get("whisper", {})
-proxy = _cfg.get("proxy", {})
-ui = _cfg.get(
-    "ui",
-    {
-        "hide_log": False,
-    },
-)
-
-hostname = socket.gethostname()
-
-log_level = _cfg.get("log_level", "DEBUG")
-listen_host = _cfg.get("listen_host", "0.0.0.0")
-listen_port = _cfg.get("listen_port", 8080)
-project_name = _cfg.get("project_name", "MoneyPrinterTurbo")
-project_description = _cfg.get(
-    "project_description",
-    "Gerador automático de vídeos curtos com IA",
-)
-project_version = _cfg.get("project_version", "2.0.0")
-reload_debug = False
-
-app["redis_host"] = os.getenv(
-    "MPT_APP_REDIS_HOST",
-    os.getenv("REDIS_HOST", app.get("redis_host", "localhost")),
-)
-
-imagemagick_path = app.get("imagemagick_path", "")
+# ── Caminhos ──────────────────────────────────────────────────
+imagemagick_path = _get("IMAGEMAGICK_PATH", "")
 if imagemagick_path and os.path.isfile(imagemagick_path):
     os.environ["IMAGEMAGICK_BINARY"] = imagemagick_path
 
-ffmpeg_path = app.get("ffmpeg_path", "")
+ffmpeg_path = _get("FFMPEG_PATH", "")
 if ffmpeg_path and os.path.isfile(ffmpeg_path):
     os.environ["IMAGEIO_FFMPEG_EXE"] = ffmpeg_path
+
+# ── Servidor ──────────────────────────────────────────────────
+listen_host = _get("HOST", "0.0.0.0")
+listen_port = int(_get("PORT", "8080"))
+log_level = _get("LOG_LEVEL", "DEBUG")
+reload_debug = False
+
+# ── Compatibilidade com código existente ──────────────────────
+# Mantém o dict "app" que outros módulos podem acessar via config.app.get(...)
+app = {
+    "video_source": video_source,
+    "pexels_api_keys": pexels_api_keys,
+    "pixabay_api_keys": pixabay_api_keys,
+    "tts_voice": tts_voice,
+    "tts_speed": tts_speed,
+    "imagemagick_path": imagemagick_path,
+    "ffmpeg_path": ffmpeg_path,
+    "openai_base_url": openai_base_url,
+    "openai_model_name": openai_model_name,
+    "openai_api_key": openai_api_key,
+}
+
+ui = {"hide_log": False}
+proxy = {}
+hostname = socket.gethostname()
+project_name = "MoneyPrinterTurbo"
+project_description = "Gerador automático de vídeos curtos com IA"
+project_version = "2.0.0"
+
+# Função save_config mantida por compatibilidade (agora é no-op)
+def save_config():
+    pass
 
 logger.info(f"{project_name} v{project_version}")

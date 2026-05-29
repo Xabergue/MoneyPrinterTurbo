@@ -20,7 +20,7 @@ def get_api_key(request: Request):
 
 def verify_token(request: Request):
     token = get_api_key(request)
-    if token != config.app.get("api_key", ""):
+    if token != getattr(config, 'api_key', '') and token != config.app.get("api_key", ""):
         request_id = get_task_id(request)
         request_url = request.url
         user_agent = request.headers.get("user-agent")
