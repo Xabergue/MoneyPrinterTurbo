@@ -1,9 +1,10 @@
 @echo off
 title MPT — Frontend
+chcp 65001 >nul
 echo.
 echo  MoneyPrinterTurbo — Frontend
-echo  Interface disponivel em: http://localhost:3001
+echo  Interface: http://localhost:3001
 echo.
 cd frontend
-call npm run dev
+npm run dev
 pause

@@ -1,11 +1,12 @@
 @echo off
 title MPT — Iniciando...
+chcp 65001 >nul
 echo.
-echo  MoneyPrinterTurbo — Iniciando tudo...
+echo  Iniciando MoneyPrinterTurbo...
 echo.
-start "MPT Backend" cmd /k "python main.py"
-timeout /t 3 /nobreak >nul
-start "MPT Frontend" cmd /k "cd frontend && npm run dev"
+start "MPT Backend" cmd /k "backend.bat"
+timeout /t 4 /nobreak >nul
+start "MPT Frontend" cmd /k "frontend.bat"
 echo.
 echo  Backend:  http://localhost:8080
 echo  Frontend: http://localhost:3001
