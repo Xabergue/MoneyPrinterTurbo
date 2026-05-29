@@ -77,6 +77,11 @@ def kokoro_tts(text: str, voice_name: str, voice_rate: float, voice_file: str) -
     Returns:
         True se o áudio foi gerado com sucesso, False caso contrário
     """
+    # Validação: se voice_name está vazio, usar o padrão
+    if not voice_name or voice_name.strip() == "":
+        voice_name = "af_heart"
+        logger.info("voice_name vazio em kokoro_tts, usando padrão: af_heart")
+
     try:
         from kokoro import KPipeline
     except ImportError:
