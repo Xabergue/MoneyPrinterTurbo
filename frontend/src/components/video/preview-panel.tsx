@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import type { Task } from '@/lib/types';
 import { TASK_STATE } from '@/lib/types';
-import { getProgressStep, getTaskStateLabel } from '@/lib/utils';
+import { getProgressStep, getTaskStateLabel, getVideoUrl } from '@/lib/utils';
 
 interface PreviewPanelProps {
   taskStatus: Task | null;
@@ -72,7 +72,7 @@ export function PreviewPanel({ taskStatus, isGenerating, error }: PreviewPanelPr
           {/* Complete state with video */}
           {hasVideo && (
             <video
-              src={taskStatus.combined_videos![0]}
+              src={getVideoUrl(taskStatus.combined_videos![0])}
               controls
               className="w-full h-full object-contain"
               autoPlay
@@ -133,7 +133,7 @@ export function PreviewPanel({ taskStatus, isGenerating, error }: PreviewPanelPr
               asChild
             >
               <a
-                href={taskStatus.combined_videos[0]}
+                href={getVideoUrl(taskStatus.combined_videos[0])}
                 download
                 target="_blank"
                 rel="noopener noreferrer"

@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Task } from '@/lib/types';
 import { TASK_STATE } from '@/lib/types';
-import { formatDate, getTaskStateLabel } from '@/lib/utils';
+import { formatDate, getTaskStateLabel, getVideoUrl } from '@/lib/utils';
 
 interface VideoCardProps {
   task: Task;
@@ -33,7 +33,7 @@ export function VideoCard({ task, onDelete, compact = false }: VideoCardProps) {
         <div className={`relative flex-shrink-0 ${compact ? 'w-20 h-20' : 'w-28 h-20'} rounded-lg overflow-hidden bg-black/40`}>
           {hasVideo ? (
             <video
-              src={task.combined_videos?.[0]}
+              src={getVideoUrl(task.combined_videos?.[0] || '')}
               className="w-full h-full object-cover"
               muted
               preload="metadata"
@@ -85,7 +85,7 @@ export function VideoCard({ task, onDelete, compact = false }: VideoCardProps) {
               asChild
             >
               <a
-                href={task.combined_videos[0]}
+                href={getVideoUrl(task.combined_videos[0])}
                 download
                 target="_blank"
                 rel="noopener noreferrer"

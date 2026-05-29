@@ -54,3 +54,21 @@ export function getProgressStep(progress: number): string {
   if (progress <= 90) return 'Montando vídeo...';
   return 'Finalizando...';
 }
+
+/**
+ * Converte um caminho local de vídeo retornado pela API em uma URL acessível
+ * pelo navegador via mount /storage do FastAPI.
+ * Exemplo: "storage/tasks/abc123/final-1.mp4" → "http://localhost:8080/storage/tasks/abc123/final-1.mp4"
+ */
+export function getVideoUrl(localPath: string): string {
+  if (!localPath) return '';
+  // Se já é uma URL absoluta, retorna como está
+  if (localPath.startsWith('http://') || localPath.startsWith('https://')) return localPath;
+  // Normaliza barras invertidas (Windows) e remove prefixo de drive
+  const normalized = localPath.replace(/\\/g, '/').replace(/^[A-Za-z]:/, '');
+  // Remove barras iniciais duplicadas
+  const clean = normalized.replace(/^\/+/, '');
+  // Garante que o caminho comece com "storage/"
+  const withStorage = clean.startsWith('storage/') ? clean : `storage/${clean}`;
+  return `http://localhost:8080/${withStorage}`;
+}

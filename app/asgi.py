@@ -63,6 +63,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount /storage to serve video files for the frontend player
+storage_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "storage")
+os.makedirs(storage_path, exist_ok=True)
+app.mount(
+    "/storage", StaticFiles(directory=storage_path, follow_symlink=True), name="storage"
+)
+
 task_dir = utils.task_dir()
 app.mount(
     "/tasks", StaticFiles(directory=task_dir, html=True, follow_symlink=True), name=""

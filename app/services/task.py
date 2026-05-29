@@ -92,7 +92,7 @@ def generate_audio(task_id, params, video_script):
 
         # Se voice_name não foi fornecido, usar o padrão do .env
         if not params.voice_name or params.voice_name.strip() == "":
-            params.voice_name = getattr(config, 'tts_voice', 'af_heart')
+            params.voice_name = getattr(config, 'tts_voice', 'pf_dora')
             logger.info(f"voice_name vazio, usando padrão: {params.voice_name}")
 
         audio_file = path.join(utils.task_dir(task_id), "audio.mp3")

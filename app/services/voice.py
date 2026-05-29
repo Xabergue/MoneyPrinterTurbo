@@ -28,6 +28,7 @@ _KOKORO_VOICES = [
     ("bm_lewis", "en-GB", "Male", "Lewis (EN-GB Masculino)"),
     ("pf_dora", "pt-BR", "Female", "Dora (PT-BR Feminino)"),
     ("pm_alex", "pt-BR", "Male", "Alex (PT-BR Masculino)"),
+    ("pm_santa", "pt-BR", "Male", "Santa (PT-BR Masculino)"),
 ]
 
 
@@ -54,14 +55,12 @@ def parse_voice_name(name: str) -> str:
 def _get_lang_code(voice_name: str) -> str:
     # Infere o lang_code do Kokoro a partir do voice_id.
     # 'a' = inglês americano, 'b' = inglês britânico, 'p' = português
-    if voice_name.startswith("af_") or voice_name.startswith("am_"):
-        return "a"
-    elif voice_name.startswith("bf_") or voice_name.startswith("bm_"):
-        return "b"
-    elif voice_name.startswith("pf_") or voice_name.startswith("pm_"):
-        return "p"
-    # Padrão para inglês americano
-    return "a"
+    if voice_name.startswith('p'):
+        return 'p'  # português
+    elif voice_name.startswith('b'):
+        return 'b'  # inglês britânico
+    else:
+        return 'a'  # inglês americano (padrão)
 
 
 def kokoro_tts(text: str, voice_name: str, voice_rate: float, voice_file: str) -> bool:
@@ -79,8 +78,8 @@ def kokoro_tts(text: str, voice_name: str, voice_rate: float, voice_file: str) -
     """
     # Validação: se voice_name está vazio, usar o padrão
     if not voice_name or voice_name.strip() == "":
-        voice_name = "af_heart"
-        logger.info("voice_name vazio em kokoro_tts, usando padrão: af_heart")
+        voice_name = "pf_dora"
+        logger.info("voice_name vazio em kokoro_tts, usando padrão: pf_dora")
 
     try:
         from kokoro import KPipeline
