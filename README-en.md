@@ -1,426 +1,291 @@
-<div align="center">
-<h1 align="center">MoneyPrinterTurbo 💸</h1>
+# MoneyPrinterTurbo v2.0 💸
 
-<p align="center">
-  <a href="https://github.com/harry0703/MoneyPrinterTurbo/stargazers"><img src="https://img.shields.io/github/stars/harry0703/MoneyPrinterTurbo.svg?style=for-the-badge" alt="Stargazers"></a>
-  <a href="https://github.com/harry0703/MoneyPrinterTurbo/issues"><img src="https://img.shields.io/github/issues/harry0703/MoneyPrinterTurbo.svg?style=for-the-badge" alt="Issues"></a>
-  <a href="https://github.com/harry0703/MoneyPrinterTurbo/network/members"><img src="https://img.shields.io/github/forks/harry0703/MoneyPrinterTurbo.svg?style=for-the-badge" alt="Forks"></a>
-  <a href="https://github.com/harry0703/MoneyPrinterTurbo/blob/main/LICENSE"><img src="https://img.shields.io/github/license/harry0703/MoneyPrinterTurbo.svg?style=for-the-badge" alt="License"></a>
-</p>
+**AI-powered automatic short video generator**
 
-<h3>English | <a href="README.md">简体中文</a></h3>
+Simply provide a topic or keyword, and the system automatically generates the script, visual materials, narration, subtitles, and background music — synthesizing everything into a high-definition short video.
 
-<div align="center">
-  <a href="https://trendshift.io/repositories/8731" target="_blank"><img src="https://trendshift.io/api/badge/repositories/8731" alt="harry0703%2FMoneyPrinterTurbo | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-</div>
+> Reformed fork of [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) with simplified backend, local TTS (Kokoro), LLM via local endpoint, and a modern React/Next.js interface.
 
-Simply provide a <b>topic</b> or <b>keyword</b> for a video, and it will automatically generate the video copy, video
-materials, video subtitles, and video background music before synthesizing a high-definition short video.
+---
 
-### WebUI
+## What Changed in v2.0
 
-![](docs/webui-en.jpg)
+| Change | Before | Now |
+|--------|--------|-----|
+| **TTS** | edge-tts (unstable, 403 errors) | **Kokoro TTS** (local, stable) |
+| **LLM** | 15+ providers with proprietary SDKs | **OpenAI-compatible** with configurable `base_url` |
+| **Frontend** | Streamlit (monolithic 48KB) | **React/Next.js** modern and professional |
+| **Subtitles** | edge (unstable) + whisper | **faster-whisper** (medium model, 1.4GB) |
+| **Videos** | Only Pexels/Pixabay | **Local library** + Pexels/Pixabay |
+| **Config** | 12KB with removed providers | **Simplified**, comments in English |
 
-### API Interface
+---
 
-![](docs/api.jpg)
+## Features
 
-</div>
+- ✅ Automatic script generation via LLM (DeepSeek, GPT, etc.)
+- ✅ Voice synthesis with Kokoro TTS (14 voices, including Portuguese)
+- ✅ Automatic subtitles with faster-whisper
+- ✅ Video sources: local library, Pexels, Pixabay
+- ✅ Aspect ratios: 9:16 (vertical), 16:9 (horizontal), 1:1 (square)
+- ✅ Batch generation (multiple videos at once)
+- ✅ Clip transitions (FadeIn, FadeOut, SlideIn, SlideOut)
+- ✅ Configurable background music
+- ✅ Modern dark theme interface in React/Next.js
+- ✅ Complete REST API with FastAPI
+- ✅ Automatic fallback: if local videos are insufficient, uses Pexels
 
-## Features 🎯
+---
 
-- [x] Complete **MVC architecture**, **clearly structured** code, easy to maintain, supports both `API`
-  and `Web interface`
-- [x] Supports **AI-generated** video copy, as well as **customized copy**
-- [x] Supports various **high-definition video** sizes
-    - [x] Portrait 9:16, `1080x1920`
-    - [x] Landscape 16:9, `1920x1080`
-- [x] Supports **batch video generation**, allowing the creation of multiple videos at once, then selecting the most
-  satisfactory one
-- [x] Supports setting the **duration of video clips**, facilitating adjustments to material switching frequency
-- [x] Supports video copy in both **Chinese** and **English**
-- [x] Supports **multiple voice** synthesis, with **real-time preview** of effects
-- [x] Supports **subtitle generation**, with adjustable `font`, `position`, `color`, `size`, and also
-  supports `subtitle outlining`
-- [x] Supports **background music**, either random or specified music files, with adjustable `background music volume`
-- [x] Video material sources are **high-definition** and **royalty-free**, and you can also use your own **local materials**
-- [x] Supports integration with various models such as **OpenAI**, **Moonshot**, **Azure**, **gpt4free**, **one-api**, **Qwen**, **Google Gemini**, **Ollama**, **DeepSeek**, **MiniMax**, **ERNIE**, **Pollinations**, **ModelScope** and more
+## Requirements
 
-## Video Demos 📺
+| Item | Minimum | Recommended |
+|------|---------|-------------|
+| CPU | 4 cores | 8+ cores |
+| RAM | 4 GB | 8 GB+ |
+| GPU | Not required | 4 GB+ VRAM (for whisper GPU) |
+| Python | 3.11+ | 3.11 |
+| Node.js | 18+ | 20+ |
+| FFmpeg | Required | Installed via system |
+| ImageMagick | Required | Installed via system |
 
-### Portrait 9:16
+---
 
-<table>
-<thead>
-<tr>
-<th align="center"><g-emoji class="g-emoji" alias="arrow_forward">▶️</g-emoji> How to Add Fun to Your Life </th>
-<th align="center"><g-emoji class="g-emoji" alias="arrow_forward">▶️</g-emoji> What is the Meaning of Life</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center"><video src="https://github.com/harry0703/MoneyPrinterTurbo/assets/4928832/a84d33d5-27a2-4aba-8fd0-9fb2bd91c6a6"></video></td>
-<td align="center"><video src="https://github.com/harry0703/MoneyPrinterTurbo/assets/4928832/112c9564-d52b-4472-99ad-970b75f66476"></video></td>
-</tr>
-</tbody>
-</table>
+## Installation
 
-### Landscape 16:9
+### 1. Clone the repository
 
-<table>
-<thead>
-<tr>
-<th align="center"><g-emoji class="g-emoji" alias="arrow_forward">▶️</g-emoji> What is the Meaning of Life</th>
-<th align="center"><g-emoji class="g-emoji" alias="arrow_forward">▶️</g-emoji> Why Exercise</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center"><video src="https://github.com/harry0703/MoneyPrinterTurbo/assets/4928832/346ebb15-c55f-47a9-a653-114f08bb8073"></video></td>
-<td align="center"><video src="https://github.com/harry0703/MoneyPrinterTurbo/assets/4928832/271f2fae-8283-44a0-8aa0-0ed8f9a6fa87"></video></td>
-</tr>
-</tbody>
-</table>
-
-## System Requirements 📦
-
-- Recommended platforms: Windows 10+, macOS 11+, or a mainstream Linux distribution
-- A GPU is not required, but it is recommended if you want faster local transcription, faster video processing, or smoother batch generation
-
-| Item | Minimum | Recommended | Optimal |
-| --- | --- | --- | --- |
-| CPU | 4 cores | 6 to 8 cores | 8+ cores |
-| RAM | 4 GB | 8 GB | 16+ GB |
-| GPU | Not required | 4+ GB VRAM | 8+ GB VRAM |
-
-- If you mainly rely on cloud LLMs, cloud TTS, and online material sources, CPU and RAM matter more than GPU
-- If you use `faster-whisper`, batch generation, or heavier local processing, a GPU will improve throughput noticeably
-
-## Quick Start 🚀
-
-### Recommended Paths
-
-- Windows users: use the one-click package first for the fastest local trial
-- MacOS / Linux users: use `uv sync --frozen` for the primary local setup path
-- If you want a more isolated runtime: use Docker deployment
-
-### Run in Google Colab 
-Want to try MoneyPrinterTurbo without setting up a local environment? Run it directly in Google Colab!
-
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/harry0703/MoneyPrinterTurbo/blob/main/docs/MoneyPrinterTurbo.ipynb)
-
-
-### Windows
-
-The downloadable package is still the older `v1.2.6` bundled build. After downloading, run `update.bat` first to bring it up to the latest code.
-
-Google Drive (v1.2.6): https://drive.google.com/file/d/1HsbzfT7XunkrCrHw5ncUjFX8XX4zAuUh/view?usp=sharing
-
-After downloading, it is recommended to **double-click** `update.bat` first to update to the **latest code**, then double-click `start.bat` to launch
-
-After launching, the browser will open automatically (if it opens blank, it is recommended to use **Chrome** or **Edge**)
-
-### Other Systems
-
-One-click startup packages have not been created yet. See the **Installation & Deployment** section below. It is recommended to use **docker** for deployment, which is more convenient.
-
-## Installation & Deployment 📥
-
-### Prerequisites
-
-#### ① Clone the Project
-
-```shell
-git clone https://github.com/harry0703/MoneyPrinterTurbo.git
+```bash
+git clone https://github.com/Xabergue/MoneyPrinterTurbo.git
+cd MoneyPrinterTurbo
 ```
 
-#### ② Modify the Configuration File
+### 2. Set up Python environment
 
-- Copy the `config.example.toml` file and rename it to `config.toml`
-- Follow the instructions in the `config.toml` file to configure `pexels_api_keys` and `llm_provider`, and according to
-  the llm_provider's service provider, set up the corresponding API Key
+We recommend using [uv](https://docs.astral.sh/uv/):
 
-### Docker Deployment 🐳
-
-#### ① Launch the Docker Container
-
-If you haven't installed Docker, please install it first https://www.docker.com/products/docker-desktop/
-If you are using a Windows system, please refer to Microsoft's documentation:
-
-1. https://learn.microsoft.com/en-us/windows/wsl/install
-2. https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-containers
-
-```shell
-cd MoneyPrinterTurbo
-docker-compose up
-```
-
-> Note：The latest version of docker will automatically install docker compose in the form of a plug-in, and the start command is adjusted to `docker compose up `
-
-#### ② Access the Web Interface
-
-Open your browser and visit http://0.0.0.0:8501
-
-#### ③ Access the API Interface
-
-Open your browser and visit http://0.0.0.0:8080/docs Or http://0.0.0.0:8080/redoc
-
-### Manual Deployment 📦
-
-#### ① Create a Python Virtual Environment
-
-It is recommended to use [uv](https://docs.astral.sh/uv/) to manage the Python environment and dependencies, with Python `3.11` as the default runtime.
-
-```shell
-git clone https://github.com/harry0703/MoneyPrinterTurbo.git
-cd MoneyPrinterTurbo
+```bash
 uv python install 3.11
 uv sync --frozen
 ```
 
-If you are not using `uv` yet, you can still use `venv + pip`.
+Or with traditional venv + pip:
 
-```shell
+```bash
 python3.11 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 ```
 
-Notes:
-- `pyproject.toml` is now the primary dependency manifest.
-- `uv.lock` pins the resolved environment, so `uv sync --frozen` is recommended by default.
-- `requirements.txt` is kept only for legacy `pip`-based installation.
+### 3. Install ImageMagick
 
-#### ② Install ImageMagick
-
-###### Windows:
-
-- Download https://imagemagick.org/script/download.php Choose the Windows version, make sure to select the **static library** version, such as ImageMagick-7.1.1-32-Q16-x64-**static**.exe
-- Install the downloaded ImageMagick, **do not change the installation path**
-- Modify the `config.toml` configuration file, set `imagemagick_path` to your actual installation path
-
-###### MacOS:
-
-```shell
+**MacOS:**
+```bash
 brew install imagemagick
-````
+```
 
-###### Ubuntu
-
-```shell
+**Ubuntu/Debian:**
+```bash
 sudo apt-get install imagemagick
 ```
 
-###### CentOS
+**Windows:**
+Download from https://imagemagick.org/script/download.php — choose the **static** version.
 
-```shell
-sudo yum install ImageMagick
+### 4. Install FFmpeg
+
+FFmpeg is usually downloaded automatically. If needed:
+- Download from https://www.gyan.dev/ffmpeg/builds/
+- Set `ffmpeg_path` in `config.toml`
+
+### 5. Set up local LLM (DeepSProxy)
+
+The project uses a local OpenAI-compatible LLM endpoint. We recommend **DeepSProxy** as a proxy for the DeepSeek API:
+
+1. Install and configure DeepSProxy running on port 3000
+2. The `config.toml` already comes configured with `openai_base_url = "http://localhost:3000/v1"` and `openai_model_name = "deepseek-chat"`
+
+If using another provider (Ollama, LM Studio, etc.), just adjust `openai_base_url` in `config.toml`.
+
+### 6. Configure settings
+
+```bash
+cp config.example.toml config.toml
 ```
 
-#### ③ Launch the Web Interface 🌐
+Edit `config.toml` and configure:
+- Pexels/Pixabay API keys (if using online sources)
+- LLM endpoint URL (default: `http://localhost:3000/v1`)
+- LLM model (default: `deepseek-chat`)
 
-Note that you need to execute the following commands in the `root directory` of the MoneyPrinterTurbo project
+### 7. Install Kokoro TTS
 
-###### Windows
+Kokoro is already in the dependencies (`pip install kokoro>=0.9.4`). If needed, install manually:
 
-```shell
-uv run streamlit run ./webui/Main.py --browser.gatherUsageStats=False
+```bash
+pip install kokoro>=0.9.4 soundfile
 ```
 
-If you have already activated the virtual environment manually, you can still run:
+### 8. Add videos to local library (optional)
 
-```bat
-webui.bat
+Place `.mp4`, `.mov`, `.avi`, or `.mkv` files in the directory:
+
+```
+resource/videos/
 ```
 
-###### MacOS or Linux
+If there aren't enough local videos, the system automatically falls back to Pexels.
 
-```shell
-uv run streamlit run ./webui/Main.py --browser.gatherUsageStats=False
-```
+---
 
-If you have already activated the virtual environment manually, you can still run:
+## Running
 
-```shell
-sh webui.sh
-```
+### Backend (FastAPI API)
 
-After launching, the browser will open automatically
-
-#### ④ Launch the API Service 🚀
-
-```shell
+```bash
+# With uv
 uv run python main.py
-```
 
-If you have already activated the virtual environment manually, you can still run:
-
-```shell
+# Or with activated venv
 python main.py
 ```
 
-## Special Thanks 🙏
+API available at http://localhost:8080
 
-Due to the **deployment** and **usage** of this project, there is a certain threshold for some beginner users. We would
-like to express our special thanks to
+Interactive docs: http://localhost:8080/docs
 
-**RecCloud (AI-Powered Multimedia Service Platform)** for providing a free `AI Video Generator` service based on this
-project. It allows for online use without deployment, which is very convenient.
+### Frontend (Next.js)
 
-- Chinese version: https://reccloud.cn
-- English version: https://reccloud.com
+```bash
+# With startup script
+bash frontend.sh
 
-![](docs/reccloud.com.jpg)
-
-## Thanks for Sponsorship 🙏
-
-Thanks to Picwish https://picwish.com for supporting and sponsoring this project, enabling continuous updates and maintenance.
-
-Picwish focuses on the **image processing field**, providing a rich set of **image processing tools** that extremely simplify complex operations, truly making image processing easier.
-
-![picwish.jpg](docs/picwish.com.jpg)
-
-After launching, you can view the `API documentation` at http://127.0.0.1:8080/docs and directly test the interface
-online for a quick experience.
-
-## Voice Synthesis 🗣
-
-A list of all supported voices can be viewed here: [Voice List](./docs/voice-list.txt)
-
-2024-04-16 v1.1.2 Added 9 new Azure voice synthesis voices that require API KEY configuration. These voices sound more realistic.
-
-## Subtitle Generation 📜
-
-Currently, there are 2 ways to generate subtitles:
-
-- **edge**: Faster generation speed, better performance, no specific requirements for computer configuration, but the
-  quality may be unstable
-- **whisper**: Slower generation speed, poorer performance, specific requirements for computer configuration, but more
-  reliable quality
-
-You can switch between them by modifying the `subtitle_provider` in the `config.toml` configuration file
-
-It is recommended to use `edge` mode, and switch to `whisper` mode if the quality of the subtitles generated is not
-satisfactory.
-
-> Note:
->
-> 1. In whisper mode, you need to download a model file from HuggingFace, about 3GB in size, please ensure good internet connectivity
-> 2. If left blank, it means no subtitles will be generated.
-
-> Since HuggingFace is not accessible in China, you can use the following methods to download the `whisper-large-v3` model file
-
-Download links:
-
-- Baidu Netdisk: https://pan.baidu.com/s/11h3Q6tsDtjQKTjUu3sc5cA?pwd=xjs9
-- Quark Netdisk: https://pan.quark.cn/s/3ee3d991d64b
-
-After downloading the model, extract it and place the entire directory in `.\MoneyPrinterTurbo\models`,
-The final file path should look like this: `.\MoneyPrinterTurbo\models\whisper-large-v3`
-
-```
-MoneyPrinterTurbo
-  ├─models
-  │   └─whisper-large-v3
-  │          config.json
-  │          model.bin
-  │          preprocessor_config.json
-  │          tokenizer.json
-  │          vocabulary.json
+# Or manually
+cd frontend
+npm install
+npm run dev
 ```
 
-## Background Music 🎵
+Interface available at http://localhost:3001
 
-Background music for videos is located in the project's `resource/songs` directory.
-> The current project includes some default music from YouTube videos. If there are copyright issues, please delete
-> them.
+---
 
-## Subtitle Fonts 🅰
+## Available Kokoro Voices
 
-Fonts for rendering video subtitles are located in the project's `resource/fonts` directory, and you can also add your
-own fonts.
+| ID | Language | Gender |
+|----|----------|--------|
+| af_heart | English US | Female |
+| af_bella | English US | Female |
+| af_sarah | English US | Female |
+| af_nicole | English US | Female |
+| am_adam | English US | Male |
+| am_michael | English US | Male |
+| am_george | English US | Male |
+| bf_emma | English GB | Female |
+| bf_alice | English GB | Female |
+| bf_isabella | English GB | Female |
+| bm_george | English GB | Male |
+| bm_lewis | English GB | Male |
+| pf_dora | Portuguese BR | Female |
+| pm_alex | Portuguese BR | Male |
 
-## Common Questions 🤔
+---
 
-### ❓RuntimeError: No ffmpeg exe could be found
+## API Endpoints
 
-Normally, ffmpeg will be automatically downloaded and detected.
-However, if your environment has issues preventing automatic downloads, you may encounter the following error:
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST | `/api/v1/videos` | Start video generation |
+| POST | `/api/v1/subtitle` | Generate subtitle only |
+| POST | `/api/v1/audio` | Generate audio only |
+| POST | `/api/v1/scripts` | Generate script via LLM |
+| POST | `/api/v1/terms` | Generate search terms |
+| GET | `/api/v1/tasks/{task_id}` | Query task status |
+| GET | `/api/v1/tasks` | List all tasks |
+| DELETE | `/api/v1/tasks/{task_id}` | Delete task |
+| GET | `/api/v1/voices` | List Kokoro voices |
+| GET | `/api/v1/musics` | List background music |
+| GET | `/api/v1/stream/{path}` | Stream video |
+| GET | `/api/v1/download/{path}` | Download video |
+
+---
+
+## Project Structure
 
 ```
-RuntimeError: No ffmpeg exe could be found.
-Install ffmpeg on your system, or set the IMAGEIO_FFMPEG_EXE environment variable.
+MoneyPrinterTurbo/
+├── main.py                     # API entry point
+├── config.example.toml         # Configuration template
+├── pyproject.toml              # Python dependencies
+├── requirements.txt            # pip backup
+├── app/                        # FastAPI Backend
+│   ├── asgi.py                 # App configuration
+│   ├── router.py               # API routes
+│   ├── config/                 # Config loading
+│   ├── controllers/            # Endpoints
+│   │   └── v1/                 # API v1 (video, llm, voices)
+│   ├── models/                 # Pydantic schemas
+│   ├── services/               # Business logic
+│   │   ├── llm.py             # OpenAI-compatible client
+│   │   ├── voice.py           # Kokoro TTS
+│   │   ├── material.py        # Video search (local/Pexels/Pixabay)
+│   │   ├── subtitle.py        # faster-whisper
+│   │   ├── video.py           # Video assembly (MoviePy + FFmpeg)
+│   │   ├── task.py            # Orchestration pipeline
+│   │   └── state.py           # State management
+│   └── utils/                  # Utilities
+├── frontend/                   # React/Next.js Interface
+│   ├── src/app/                # Pages (App Router)
+│   ├── src/components/         # UI Components
+│   └── src/lib/                # API client, hooks
+├── resource/
+│   ├── fonts/                  # Subtitle fonts
+│   ├── songs/                  # Background music
+│   └── videos/                 # Local video library
+└── test/                       # Unit tests
 ```
 
-In this case, you can download ffmpeg from https://www.gyan.dev/ffmpeg/builds/, unzip it, and set `ffmpeg_path` to your
-actual installation path.
+---
 
+## Docker Deployment
+
+```bash
+docker-compose up
+```
+
+API available at http://localhost:8080
+
+---
+
+## FAQ
+
+### Kokoro TTS doesn't work
+
+Check dependencies:
+```bash
+pip install kokoro>=0.9.4 soundfile
+```
+
+### Whisper model won't load
+
+The `medium` model (~1.4GB) downloads automatically on first run. If network is unstable, download manually and place in `models/whisper-medium/`.
+
+### FFmpeg not found
+
+Set the path in `config.toml`:
 ```toml
-[app]
-# Please set according to your actual path, note that Windows path separators are \\
-ffmpeg_path = "C:\\Users\\harry\\Downloads\\ffmpeg.exe"
+ffmpeg_path = "/path/to/ffmpeg"
 ```
 
-### ❓ImageMagick is not installed on your computer
+### "Too many open files" error
 
-[issue 33](https://github.com/harry0703/MoneyPrinterTurbo/issues/33)
-
-1. Follow the `example configuration` provided `download address` to
-   install https://imagemagick.org/archive/binaries/ImageMagick-7.1.1-30-Q16-x64-static.exe, using the static library
-2. Do not install in a path with Chinese characters to avoid unpredictable issues
-
-[issue 54](https://github.com/harry0703/MoneyPrinterTurbo/issues/54#issuecomment-2017842022)
-
-For Linux systems, you can manually install it, refer to https://cn.linux-console.net/?p=16978
-
-Thanks to [@wangwenqiao666](https://github.com/wangwenqiao666) for their research and exploration
-
-### ❓ImageMagick's security policy prevents operations related to temporary file @/tmp/tmpur5hyyto.txt
-
-You can find these policies in ImageMagick's configuration file policy.xml.
-This file is usually located in /etc/ImageMagick-`X`/ or a similar location in the ImageMagick installation directory.
-Modify the entry containing `pattern="@"`, change `rights="none"` to `rights="read|write"` to allow read and write operations on files.
-
-### ❓OSError: [Errno 24] Too many open files
-
-This issue is caused by the system's limit on the number of open files. You can solve it by modifying the system's file open limit.
-
-Check the current limit:
-
-```shell
-ulimit -n
-```
-
-If it's too low, you can increase it, for example:
-
-```shell
+Increase the limit:
+```bash
 ulimit -n 10240
 ```
 
-### ❓Whisper model download failed, with the following error
+---
 
-LocalEntryNotfoundEror: Cannot find an appropriate cached snapshotfolderfor the specified revision on the local disk and
-outgoing trafic has been disabled.
-To enablerepo look-ups and downloads online, pass 'local files only=False' as input.
+## License
 
-or
-
-An error occurred while synchronizing the model Systran/faster-whisper-large-v3 from the Hugging Face Hub:
-An error happened while trying to locate the files on the Hub and we cannot find the appropriate snapshot folder for the
-specified revision on the local disk. Please check your internet connection and try again.
-Trying to load the model directly from the local cache, if it exists.
-
-Solution: [Click to see how to manually download the model from netdisk](#subtitle-generation-)
-
-## Feedback & Suggestions 📢
-
-- You can submit an [issue](https://github.com/harry0703/MoneyPrinterTurbo/issues) or
-  a [pull request](https://github.com/harry0703/MoneyPrinterTurbo/pulls).
-
-## License 📝
-
-Click to view the [`LICENSE`](LICENSE) file
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=harry0703/MoneyPrinterTurbo&type=Date)](https://star-history.com/#harry0703/MoneyPrinterTurbo&Date)
+MIT — see the [LICENSE](LICENSE) file

@@ -12,7 +12,9 @@ from loguru import logger
 from app.config import config
 from app.utils import utils
 
-model_size = config.whisper.get("model_size", "large-v3")
+# Modelo padrão alterado para "medium" (1.4GB) — é menor que large-v3 (3GB),
+# roda bem em CPU e a qualidade é suficiente para legendas de vídeos curtos.
+model_size = config.whisper.get("model_size", "medium")
 device = config.whisper.get("device", "cpu")
 compute_type = config.whisper.get("compute_type", "int8")
 model = None
@@ -21,7 +23,7 @@ model = None
 def create(audio_file, subtitle_file: str = ""):
     global model
     if WhisperModel is None:
-        logger.warning("faster_whisper not available, skipping whisper subtitle generation")
+        logger.warning("faster_whisper não está disponível, pulando geração de legendas por whisper")
         return ""
     if not model:
         model_path = f"{utils.root_dir()}/models/whisper-{model_size}"
@@ -30,7 +32,7 @@ def create(audio_file, subtitle_file: str = ""):
             model_path = model_size
 
         logger.info(
-            f"loading model: {model_path}, device: {device}, compute_type: {compute_type}"
+            f"carregando modelo: {model_path}, dispositivo: {device}, compute_type: {compute_type}"
         )
         try:
             model = WhisperModel(
@@ -38,16 +40,16 @@ def create(audio_file, subtitle_file: str = ""):
             )
         except Exception as e:
             logger.error(
-                f"failed to load model: {e} \n\n"
+                f"falha ao carregar modelo: {e} \n\n"
                 f"********************************************\n"
-                f"this may be caused by network issue. \n"
-                f"please download the model manually and put it in the 'models' folder. \n"
-                f"see [README.md FAQ](https://github.com/harry0703/MoneyPrinterTurbo) for more details.\n"
+                f"Isto pode ser causado por problema de rede. \n"
+                f"Baixe o modelo manualmente e coloque na pasta 'models'. \n"
+                f"Consulte o README.md para mais detalhes.\n"
                 f"********************************************\n\n"
             )
             return None
 
-    logger.info(f"start, output file: {subtitle_file}")
+    logger.info(f"iniciando, arquivo de saída: {subtitle_file}")
     if not subtitle_file:
         subtitle_file = f"{audio_file}.srt"
 
@@ -60,7 +62,7 @@ def create(audio_file, subtitle_file: str = ""):
     )
 
     logger.info(
-        f"detected language: '{info.language}', probability: {info.language_probability:.2f}"
+        f"idioma detectado: '{info.language}', probabilidade: {info.language_probability:.2f}"
     )
 
     start = timer()
@@ -94,11 +96,11 @@ def create(audio_file, subtitle_file: str = ""):
                     is_segmented = True
 
                 seg_end = word.end
-                # If it contains punctuation, then break the sentence.
+                # Se contém pontuação, quebra a sentença
                 seg_text += word.word
 
                 if utils.str_contains_punctuation(word.word):
-                    # remove last char
+                    # Remove o último caractere
                     seg_text = seg_text[:-1]
                     if not seg_text:
                         continue
@@ -122,7 +124,7 @@ def create(audio_file, subtitle_file: str = ""):
     end = timer()
 
     diff = end - start
-    logger.info(f"complete, elapsed: {diff:.2f} s")
+    logger.info(f"concluído, tempo decorrido: {diff:.2f} s")
 
     idx = 1
     lines = []
@@ -139,7 +141,7 @@ def create(audio_file, subtitle_file: str = ""):
     sub = "\n".join(lines) + "\n"
     with open(subtitle_file, "w", encoding="utf-8") as f:
         f.write(sub)
-    logger.info(f"subtitle file created: {subtitle_file}")
+    logger.info(f"arquivo de legenda criado: {subtitle_file}")
 
 
 def file_to_subtitles(filename):
@@ -226,7 +228,7 @@ def correct(subtitle_file, video_script):
 
             if similarity(script_line, combined_subtitle) > 0.8:
                 logger.warning(
-                    f"Merged/Corrected - Script: {script_line}, Subtitle: {combined_subtitle}"
+                    f"Mesclado/Corrigido - Roteiro: {script_line}, Legenda: {combined_subtitle}"
                 )
                 new_subtitle_items.append(
                     (
@@ -238,7 +240,7 @@ def correct(subtitle_file, video_script):
                 corrected = True
             else:
                 logger.warning(
-                    f"Mismatch - Script: {script_line}, Subtitle: {combined_subtitle}"
+                    f"Incompatibilidade - Roteiro: {script_line}, Legenda: {combined_subtitle}"
                 )
                 new_subtitle_items.append(
                     (
@@ -252,9 +254,9 @@ def correct(subtitle_file, video_script):
             script_index += 1
             subtitle_index = next_subtitle_index
 
-    # Process the remaining lines of the script.
+    # Processa as linhas restantes do roteiro
     while script_index < len(script_lines):
-        logger.warning(f"Extra script line: {script_lines[script_index]}")
+        logger.warning(f"Linha extra do roteiro: {script_lines[script_index]}")
         if subtitle_index < len(subtitle_items):
             new_subtitle_items.append(
                 (
@@ -279,27 +281,15 @@ def correct(subtitle_file, video_script):
         with open(subtitle_file, "w", encoding="utf-8") as fd:
             for i, item in enumerate(new_subtitle_items):
                 fd.write(f"{i + 1}\n{item[1]}\n{item[2]}\n\n")
-        logger.info("Subtitle corrected")
+        logger.info("Legenda corrigida")
     else:
-        logger.success("Subtitle is correct")
+        logger.success("Legenda está correta")
 
 
 if __name__ == "__main__":
-    task_id = "c12fd1e6-4b0a-4d65-a075-c87abe35a072"
+    task_id = "test_task_id"
     task_dir = utils.task_dir(task_id)
     subtitle_file = f"{task_dir}/subtitle.srt"
     audio_file = f"{task_dir}/audio.mp3"
 
-    subtitles = file_to_subtitles(subtitle_file)
-    print(subtitles)
-
-    script_file = f"{task_dir}/script.json"
-    with open(script_file, "r") as f:
-        script_content = f.read()
-    s = json.loads(script_content)
-    script = s.get("script")
-
-    correct(subtitle_file, script)
-
-    subtitle_file = f"{task_dir}/subtitle-test.srt"
     create(audio_file, subtitle_file)
