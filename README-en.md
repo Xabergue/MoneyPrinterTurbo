@@ -44,7 +44,7 @@ Simply provide a topic or keyword, and the system automatically generates the sc
 | CPU | 4 cores | 8+ cores |
 | RAM | 4 GB | 8 GB+ |
 | GPU | Not required | 4 GB+ VRAM (for whisper GPU) |
-| Python | 3.11+ | 3.11 |
+| Python | 3.11+ | 3.11 or 3.12 |
 | Node.js | 18+ | 20+ |
 | FFmpeg | Required | Installed via system |
 | ImageMagick | Required | Installed via system |
@@ -62,11 +62,21 @@ cd MoneyPrinterTurbo
 
 ### 2. Set up Python environment
 
+> **⚠️ Compatibility notice:** Python 3.11 or 3.12 is recommended. Python 3.13 has limited Kokoro TTS support — use `conda create -n mpt python=3.11 -y` to avoid incompatibilities.
+
 We recommend using [uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv python install 3.11
 uv sync --frozen
+```
+
+Or with conda:
+
+```bash
+conda create -n mpt python=3.11 -y
+conda activate mpt
+pip install -r requirements.txt
 ```
 
 Or with traditional venv + pip:
@@ -120,10 +130,19 @@ Edit `config.toml` and configure:
 
 ### 7. Install Kokoro TTS
 
-Kokoro is already in the dependencies (`pip install kokoro>=0.9.4`). If needed, install manually:
+Kokoro is already in the dependencies. The version installed depends on your Python:
+
+- **Python 3.11/3.12:** `kokoro>=0.9.4,<1.0` (recommended)
+- **Python 3.13:** `kokoro==0.7.16` (limited support)
+
+If needed, install manually:
 
 ```bash
-pip install kokoro>=0.9.4 soundfile
+# Python 3.11 or 3.12 (recommended)
+pip install "kokoro>=0.9.4,<1.0" soundfile
+
+# Python 3.13
+pip install kokoro==0.7.16 soundfile
 ```
 
 ### 8. Add videos to local library (optional)
@@ -261,10 +280,16 @@ API available at http://localhost:8080
 
 ### Kokoro TTS doesn't work
 
-Check dependencies:
+Check dependencies (Kokoro version depends on your Python version):
 ```bash
-pip install kokoro>=0.9.4 soundfile
+# Python 3.11 or 3.12
+pip install "kokoro>=0.9.4,<1.0" soundfile
+
+# Python 3.13 (limited support)
+pip install kokoro==0.7.16 soundfile
 ```
+
+If issues persist on Python 3.13, we recommend using Python 3.11 or 3.12.
 
 ### Whisper model won't load
 

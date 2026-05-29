@@ -44,7 +44,7 @@ Basta fornecer um tema ou palavra-chave, e o sistema gera automaticamente o rote
 | CPU | 4 núcleos | 8+ núcleos |
 | RAM | 4 GB | 8 GB+ |
 | GPU | Não obrigatório | 4 GB+ VRAM (para whisper GPU) |
-| Python | 3.11+ | 3.11 |
+| Python | 3.11+ | 3.11 ou 3.12 |
 | Node.js | 18+ | 20+ |
 | FFmpeg | Obrigatório | Instalado via sistema |
 | ImageMagick | Obrigatório | Instalado via sistema |
@@ -62,11 +62,21 @@ cd MoneyPrinterTurbo
 
 ### 2. Configure o ambiente Python
 
+> **⚠️ Aviso de compatibilidade:** Python 3.11 ou 3.12 é recomendado. Python 3.13 tem suporte limitado ao Kokoro TTS — use `conda create -n mpt python=3.11 -y` para evitar incompatibilidades.
+
 Recomendamos usar [uv](https://docs.astral.sh/uv/) para gerenciar o ambiente:
 
 ```bash
 uv python install 3.11
 uv sync --frozen
+```
+
+Ou com conda:
+
+```bash
+conda create -n mpt python=3.11 -y
+conda activate mpt
+pip install -r requirements.txt
 ```
 
 Ou com venv + pip tradicional:
@@ -120,10 +130,19 @@ Edite o `config.toml` e configure:
 
 ### 7. Instale o Kokoro TTS
 
-O Kokoro já está nas dependências (`pip install kokoro>=0.9.4`). Se necessário, instale manualmente:
+O Kokoro já está nas dependências. A versão instalada depende do Python:
+
+- **Python 3.11/3.12:** `kokoro>=0.9.4,<1.0` (recomendado)
+- **Python 3.13:** `kokoro==0.7.16` (suporte limitado)
+
+Se necessário, instale manualmente:
 
 ```bash
-pip install kokoro>=0.9.4 soundfile
+# Python 3.11 ou 3.12 (recomendado)
+pip install "kokoro>=0.9.4,<1.0" soundfile
+
+# Python 3.13
+pip install kokoro==0.7.16 soundfile
 ```
 
 ### 8. Adicione vídeos à biblioteca local (opcional)
@@ -261,10 +280,16 @@ A API fica disponível em http://localhost:8080
 
 ### O Kokoro TTS não funciona
 
-Verifique se as dependências estão instaladas:
+Verifique se as dependências estão instaladas (a versão do Kokoro varia conforme o Python):
 ```bash
-pip install kokoro>=0.9.4 soundfile
+# Python 3.11 ou 3.12
+pip install "kokoro>=0.9.4,<1.0" soundfile
+
+# Python 3.13 (suporte limitado)
+pip install kokoro==0.7.16 soundfile
 ```
+
+Se persistirem problemas no Python 3.13, recomendamos usar Python 3.11 ou 3.12.
 
 ### O modelo Whisper não carrega
 
